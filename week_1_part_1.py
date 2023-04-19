@@ -52,18 +52,20 @@ print(binary_search_position([1, 2, 5, 6, 7], 6)) # should print 3
 print('---------- Assignment 4 ----------')
 
 def draw_pyramid(number): 
-    i = 0
 
-    while i < number:                   # 行（逐行顯示）
-        j = 0                           # 初始化欄，讓每一行都從第一個開始
-        while j < number * 2 - 1:       # 欄（每一行中的每一格要顯示空格或 *）
-            if i + j >= number - 1 and j - i <= number - 1: # 要顯示 * 的規律
-                print('*', end = '')    # 因為要讓字串接在後面，所以 print function 加上 end 參數
-            else:
-                print(' ', end = '')
-            j += 1
-        print('\n')                     # 一行印完之後要換行
-        i += 1
+    ## Method 1
+    for i in range(number):                                 # 行（逐行顯示）
+        print(' ' * (number - i - 1) + '*' * (2 * i + 1))   # 顯示規則：
+                                                            # 1. 空格數量為 number（總行數） - 目前行數
+                                                            # 2. * 數量為目前行數的兩倍 + 
+    ## Method 2
+    #for i in range(number):
+    #    for j in range(i + number):
+    #        if i + j >= number - 1:
+    #            print('*', end = '')
+    #        else:
+    #            print(' ', end = '')
+    #    print('\n')  
 
 draw_pyramid(3)
 # output:

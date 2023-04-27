@@ -21,9 +21,9 @@ df = pd.read_excel('StudentScore_sheet.xlsx')               # Read Excel
 section = ['Reading', 'Listening', 'Speaking', 'Writing']   # Column names
 weight = [0.2, 0.25, 0.3, 0.25]                             # The weights of different section of the score
 
-for i in range(5):                                          # 計算每一位學生的分數
+for i in range(len(df)):                                    # 計算每一位學生的分數
     score = 0                                               # 初始化 score 的值
-    for j in range(4):                                      # 計算每一個 section * 比重後的分數
+    for j in range(len(section)):                           # 計算每一個 section * 比重後的分數
         score += df.iloc[i][section[j]] * weight[j]
     print(f'student: {df.iloc[i]["Student"]}, score: {score}')  # print 出該位學生的名字和分數
 
@@ -34,14 +34,12 @@ print('---------- Assignment 2 ----------')
 def division(x, y):
 
     try:
-        if y == 0:                                      # ZeroDivisionError 的情境是被除數為 0
-            raise ZeroDivisionError('y cannot be 0')    # 定義要顯示的文字
-        elif type(y) != int:                            # TypeError 的情境是 y 不等於整數
+        if type(y) != int:                              # TypeError 的情境是 y 不等於整數
             raise TypeError('y should be integer')      # 定義要顯示的文字
         else:
             print(x / y)                                # 無錯誤的情況時，做除法運算
     except ZeroDivisionError as e:
-        print(repr(e))                                  # Throw ZeroDivisionError
+        print(f"{type(e).__name__}('y cannot be 0')")   # Throw ZeroDivisionError
     except TypeError as e:
         print(repr(e))                                  # Throw TypeError
     finally:

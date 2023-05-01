@@ -32,12 +32,16 @@ delete_id = 2
 delete_user = ("DELETE FROM user "
                "WHERE id = %s" % delete_id)
 
-cursor.execute(add_user, data_user)
-cursor.execute(select_id)
-cursor.execute(update_password, multi = True)
-cursor.execute(delete_user)
+cursor.execute(add_user, data_user)             # Create data
+cnx.commit()                                    # Make sure data is committed to the database
 
-cnx.commit()                                                # Make sure data is committed to the database
+cursor.execute(select_id)                       # Select(Read) data
+
+cursor.execute(update_password, multi = True)   # Update data
+cnx.commit()
+
+cursor.execute(delete_user)                     # Delete data
+cnx.commit()
 
 cursor.close()
 cnx.close()
@@ -87,7 +91,6 @@ cursor.execute(max_maths_score)
 cursor.execute(number_of_english_score_higher_60)
 cursor.execute(list_score_of_boy_chou_student)
 
-cnx.commit()                                                # Make sure data is committed to the database
 
 cursor.close()
 cnx.close()
@@ -109,7 +112,6 @@ join_tables = ("SELECT Customers.customer, SUM(Orders.amount) "
 
 cursor.execute(join_tables)
 
-cnx.commit()                                                # Make sure data is committed to the database
 
 results = cursor.fetchall()
 for i in range(len(results)):
@@ -132,7 +134,6 @@ def pagination(current_page, no_of_record):
                                 "LIMIT %s, %s;" % ((current_page - 1) * no_of_record, no_of_record) )
     cursor.execute(list_items_of_pagination)
 
-    cnx.commit()                                                # Make sure data is committed to the database
 
     results = cursor.fetchall()
 

@@ -2,13 +2,18 @@
 print('---------- Assignment 1 ----------')
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 driver = webdriver.Chrome()
 try:
+    wait = WebDriverWait(driver, 10)
     driver.maximize_window()
     driver.get('https://school.appworks.tw/')
 
-    title_of_page = driver.find_element(By.CSS_SELECTOR, '#page > div.header-wrapper > div > div.header-description.content-on-center.gridContainer > div > div > div > h1 > span').text
+    title_of_page = wait.until(EC.presence_of_element_located(
+        (By.CSS_SELECTOR, 'h1.hero-title span')
+    )).text
     if title_of_page == 'Code Your Future':
         print('PASS')
     else:
@@ -17,14 +22,18 @@ try:
     driver.find_element(By.XPATH, "//a[text()='AppWorks']").click()
     wins = driver.window_handles
     driver.switch_to.window(wins[-1])
-    appworks_subtitle = driver.find_element(By.CSS_SELECTOR, '#main > div:nth-child(1) > div.wpb_column.vc_column_container.vc_col-sm-12 > div > div > div.wpb_text_column.wpb_content_element.vc_custom_1503949130309.en.bold > div > h3 > span > em').text
+    appworks_subtitle = wait.until(EC.presence_of_element_located(
+        (By.CSS_SELECTOR, '.wpb_wrapper h3 span')
+    )).text
     if appworks_subtitle == 'By Founders, For Founders':
         print('PASS')
     else:
         print('FAIL')
 
     driver.get('https://appworks.tw/investments/')
-    investments_subtitle = driver.find_element(By.CSS_SELECTOR, '#main > div:nth-child(1) > div.wpb_column.vc_column_container.vc_col-sm-12 > div > div > div.wpb_text_column.wpb_content_element.vc_custom_1508692402796.en > div > h3 > span > em').text
+    investments_subtitle = wait.until(EC.presence_of_element_located(
+        (By.CSS_SELECTOR, '.wpb_wrapper h3 span')
+    )).text
     if investments_subtitle == 'We know you have a choice. We want you to choose us.':
         print('PASS')
     else:

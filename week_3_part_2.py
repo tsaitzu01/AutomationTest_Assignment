@@ -18,11 +18,11 @@ try:
     )).click()
     # Click View cart button
     wait.until(EC.element_to_be_clickable(
-        (By.XPATH, '//a[@class="added_to_cart wc-forward"]')
+        (By.XPATH, '//a[contains(@Class, "added_to_cart")]')
     )).click()
     # Change the quantity to 2
     quantity_input_element = wait.until(EC.element_to_be_clickable(
-        (By.XPATH, '//input[@class="input-text qty text"]')
+        (By.XPATH, '//input[contains(@Class, "qty text")]')
     ))
     quantity_input_element.click()
     quantity_input_element.clear()
@@ -37,14 +37,20 @@ try:
     ))
 
     # Verify that Subtotal is $30.00
+    unit_price = wait.until(EC.presence_of_element_located(
+        (By.XPATH, '//td[contains(@Class, "product-price")]')
+    )).text
+    quantity = driver.find_element(By.XPATH, '//input[contains(@Class, "qty text")]').get_attribute("value")
+    total_price = format(float(unit_price[1:len(unit_price)]) * int(quantity), '.2f')
+
     subtotal_list = wait.until(EC.presence_of_all_elements_located(
         (By.XPATH, '//td[@data-title="Subtotal"]/span[@class="woocommerce-Price-amount amount"]')
     ))
     for subtotal in subtotal_list:
-        assert subtotal.text == '$30.00'
+        assert subtotal.text == '$' + total_price
     # Click “Checkout”
     wait.until(EC.element_to_be_clickable(
-        (By.XPATH, '//a[@class="checkout-button button alt wc-forward"]')
+        (By.XPATH, '//a[contains(@Class, "checkout-button")]')
     )).click()
     # Fill in the form
     first_name = wait.until(EC.element_to_be_clickable(

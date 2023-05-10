@@ -13,6 +13,8 @@ for i in range(len(activity)):
 
 # Assignment 2
 print('---------- Assignment 2 ----------')
+import json
+
 user_info = {
   "username": "admin",
   "password": "password"
@@ -22,31 +24,40 @@ session = requests.session()
 post_login = session.post('https://automationintesting.online/auth/login', json = user_info)
 
 get_room_list = session.get('https://automationintesting.online/room/')
-checkin = "2024-02-25"
-checkout = "2024-02-26"
+checkin = "2024-03-09"
+checkout = "2024-03-10"
 first_room = get_room_list.json()['rooms'][0]['roomid']
 
 booking_info = {
-    "bookingdates": {
-        "checkin": "%s" % checkin,
-        "checkout": "%s" % checkout
+    'bookingdates': {
+        'checkin': '%s' % checkin,
+        'checkout': '%s' % checkout
     },
-    "depositpaid": "true",
-    "firstname": "First",
-    "lastname": "Last",
-    "roomid": "%s" % first_room,
-    "totalprice": "100"
+    'depositpaid': 'true',
+    'firstname': 'First',
+    'lastname': 'Last',
+    'roomid': '%s' % first_room,
+    'totalprice': '100'
 }
-headers = {
-    'Content-Type':'application/json', 
-    'Accept':'*/*'
-}
-post_booking = session.post('https://automationintesting.online/booking/', json = booking_info, headers = headers)
+post_booking = session.post('https://automationintesting.online/booking/', json = booking_info)
 assert post_booking.status_code == 201
 
 id = post_booking.json()['bookingid']
-booking_result = f"""{{'bookingid': {id}, 'booking': {{'bookingid': {id}, 'roomid': {first_room}, 'firstname': 'First', 'lastname': 'Last', 'depositpaid': True, 'bookingdates': {{'checkin': '{checkin}', 'checkout': '{checkout}'}}}}}}"""
-assert str(post_booking.json()) == booking_result 
+booking_result = {
+    'bookingid': id, 
+    'booking': {
+        'bookingid': id, 
+        'roomid': first_room, 
+        'firstname': 'First', 
+        'lastname': 'Last', 
+        'depositpaid': True, 
+        'bookingdates': {
+            'checkin': '%s' % checkin, 
+            'checkout': '%s' % checkout
+        }
+    }
+}
+assert json.dumps(post_booking.json()) == json.dumps(booking_result)
 
 
 # Assignment 3
